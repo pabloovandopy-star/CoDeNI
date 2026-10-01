@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NiloCode · Nilo</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- BARRA SUPERIOR (visible en mapa y juego) -->
+<header id="bar" hidden>
+  <strong class="logo sm">NiloCode</strong>
+  <button data-go="map">MAPA</button>
+  <button data-open="guide">GUÍA DE CÓDIGO</button>
+  <span class="stat">XP <b id="xp">0</b></span>
+  <span class="stat">PUNTOS <b id="pts">0</b></span>
+  <button id="bSnd" aria-pressed="true">🔊 Sonido</button>
+  <button id="bMus" aria-pressed="true">🎵 Música</button>
+</header>
+
+<!-- PANTALLA INICIAL -->
+<section id="intro" class="screen">
+  <h1 class="logo">Nilo/Code</h1>
+  <pre class="oneline"><span class="fn">avanzar</span>();  <span class="cm">// la aventura empieza con una línea de código</span></pre>
+  <canvas id="ci" width="384" height="160" aria-label="Nilo frente a un bosque al atardecer"></canvas>
+  <nav class="menu">
+    <button id="bStart" class="primary">COMENZAR AVENTURA</button>
+    <button data-open="guide">GUÍA DE CÓDIGO</button>
+    <button data-open="stats">ESTADÍSTICAS</button>
+    <button data-open="opts">OPCIONES</button>
+  </nav>
+</section>
+
+<!-- MAPA DE AVENTURA -->
+<section id="map" class="screen" hidden>
+  <h2>Mapa de la región</h2>
+  <p class="soft">Elige una zona desbloqueada. Cada misión completada abre el siguiente camino.</p>
+  <ol id="zones"></ol>
+</section>
+
+<!-- JUEGO -->
+<section id="game" class="screen" hidden>
+  <div class="stage panel">
+    <canvas id="cv" width="384" height="288" aria-label="Escenario del juego"></canvas>
+    <div id="hud"></div>
+  </div>
+  <div class="side">
+    <div class="panel mission">
+      <h2 id="lname"></h2>
+      <p id="ldesc"></p>
+      <p><b>Objetivo:</b> <span id="lobj"></span></p>
+      <div id="chips" aria-label="Comandos disponibles"></div>
+    </div>
+    <div class="editor panel">
+      <div id="gut" aria-hidden="true">1</div>
+      <div class="wrap"><pre id="hl" aria-hidden="true"></pre>
+      <textarea id="code" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Editor de código"></textarea></div>
+    </div>
+    <div id="out" role="status" aria-live="polite"></div>
+    <div class="btns">
+      <button id="bRun" class="primary">▶ EJECUTAR</button>
+      <button id="bReset">↻ REINICIAR</button>
+      <button id="bHelp">💡 AYUDA</button>
+    </div>
+  </div>
+</section>
+
+<!-- VENTANAS -->
+<dialog id="guide">
+  <h2>📖 Guía de código</h2>
+  <p class="soft">El manual de Nilo. Está disponible en cualquier nivel.</p>
+  <h3>Secuencias</h3>
+  <p>Un programa es una lista de órdenes que se ejecutan una tras otra. Si Nilo gira antes de avanzar, llega a otro sitio: el orden importa.</p>
+  <pre>avanzar();
+avanzar();
+derecha();
+avanzar();</pre>
+  <h3>Variables</h3>
+  <p>Una variable es como un espacio dentro de la mochila de Nilo donde puede guardar información. Su valor cambia: <code>troncos</code> sube cada vez que recoges uno.</p>
+  <pre>troncos = 0;
+recoger();     // troncos = 1</pre>
+  <h3>Operadores</h3>
+  <p><code>=</code> guarda un valor · <code>+</code> suma · <code>-</code> resta · <code>+=</code> suma y guarda · <code>-=</code> resta y guarda.</p>
+  <pre>bateria = 10;
+bateria -= 1;  // cada paso con la linterna</pre>
+  <p class="soft">En el juego, la batería baja sola con cada <code>avanzar();</code> de noche.</p>
+  <h3>Condicionales</h3>
+  <p><code>si</code> decide según lo que Nilo ve. <code>sino</code> es el plan B.</p>
+  <pre>si(camino_libre) {
+  avanzar();
+} sino {
+  derecha();
+}</pre>
+  <h3>Bucles</h3>
+  <p>Repiten una acción sin escribirla muchas veces.</p>
+  <pre>repetir(5) {
+  avanzar();
+}</pre>
+  <h3>Funciones</h3>
+  <p>Agrupan varias instrucciones con un nombre para reutilizarlas: por ejemplo <code>subirMontaña();</code> podría contener todos los pasos de una subida. (Llegan en la montaña y el mirador.)</p>
+  <h3>Optimización</h3>
+  <p>Dos programas pueden llegar a la meta, pero el más corto es mejor: da más puntos. Si repites lo mismo, usa un bucle.</p>
+  <form method="dialog"><button class="primary">Volver a la aventura</button></form>
+</dialog>
+
+<dialog id="stats">
+  <h2>Mis estadísticas</h2>
+  <table id="stTable"></table>
+  <form method="dialog"><button class="primary">Cerrar</button></form>
+</dialog>
+
+<dialog id="opts">
+  <h2>Opciones</h2>
+  <label><input type="checkbox" id="oSnd"> Efectos de sonido</label>
+  <label><input type="checkbox" id="oMus"> Música ambiental</label>
+  <label><input type="checkbox" id="oRed"> Reducir animaciones</label>
+  <button id="oClear">Borrar mi progreso</button>
+  <form method="dialog"><button class="primary">Cerrar</button></form>
+</dialog>
+
+<dialog id="help">
+  <h2>💡 Ayuda</h2>
+  <pre id="helpTxt"></pre>
+  <form method="dialog"><button class="primary">Entendido</button></form>
+</dialog>
+
+<script src="script.js"></script>
+</body>
+</html>
